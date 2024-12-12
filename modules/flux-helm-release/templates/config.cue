@@ -49,6 +49,10 @@ import (
 	}]
 
 	helmValues?: {...}
+
+	secretValues?: {...}
+
+	valuesFrom?: {...}
 }
 
 // Instance takes the config values and outputs the Kubernetes objects.
@@ -56,6 +60,15 @@ import (
 	config: #Config
 
 	objects: release: #HelmRelease & {#config: config}
+
+	if config.secretValues != _|_ {
+		objects: configsecret: #Secret & {#config: config}
+		config: config & {
+			valuesFrom: {
+				kind: "Secret"
+				name: objects.configsecret.metadata.name
+			}
+		}}
 
 	if strings.HasPrefix(config.repository.url, "oci://") {
 		objects: repository: #OCIRepository & {#config: config}

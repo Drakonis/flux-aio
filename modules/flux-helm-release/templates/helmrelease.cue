@@ -70,6 +70,13 @@ import (
 			values: #config.helmValues
 		}
 
+		if #config.valuesFrom != _|_ {
+			valuesFrom: [{
+				kind: #config.valuesFrom.kind
+				name: #config.valuesFrom.name
+			}]
+		}
+
 		if #config.dependsOn != _|_ {
 			dependsOn: #config.dependsOn
 		}
